@@ -30,7 +30,7 @@ class Piece {
   move(steps) {
     this.position += this.stride * steps;
   }
-  draw(p5, boardSize, offset) {
+  draw(p5, boardSize, offset, index) {
     offset = offset || 0;
     let i0 = this.position;
     let i1 = i0 + this.stride * (this.size - 1);
@@ -50,10 +50,16 @@ class Piece {
     }
     if (this.stride === 1) {
       p5.strokeWeight(0);
-      p5.rect(x + 0.2, y + 0, w - 0.4, h);
+      if (index == 0) {
+        p5.strokeWeight(0);
+        p5.rect(x, y + 0, w, h);
+      } else {
+        p5.strokeWeight(0);
+        p5.rect(x + 0.2, y + 0, w - 0.4, h);
+      }
     } else {
       p5.strokeWeight(0);
-      p5.rect(x + 0, y + 0.4, w - 0, h - 0.7);
+      p5.rect(x + 0, y + 0.2, w, h - 0.4);
     }
   }
   pickAxis(point) {
@@ -226,12 +232,12 @@ class View {
     this.undoStack = [];
 
     this.backgroundColor = "#FFFFFF";
-    this.boardColor = "#3d3d3d";
+    this.boardColor = "#262227";
     this.gridLineColor = "#464646";
-    this.primaryPieceColor = "#DFFF00";
+    this.primaryPieceColor = "#F8D522";
     this.pieceColor = "#338899";
-    this.pieceColorHorizontal = "#02dc60";
-    this.pieceColorVertical = "#fe1e09";
+    this.pieceColorHorizontal = "#55FD2F";
+    this.pieceColorVertical = "#E0000F";
     this.pieceOutlineColor = "#222222";
     this.wallColor = "#222222";
     this.wallBoltColor = "#AAAAAA";
@@ -399,7 +405,7 @@ class View {
     p5.resizeCanvas(p5.windowWidth, p5.windowHeight - UnusableHeight);
   }
 
-  drawPieceWithLines(p5, x, y, piece, size, offset = 0) {
+  drawPieceWithLines(p5, x, y, piece, size, offset = 0, index) {
     // Set common stroke properties
     p5.strokeWeight(0.2);
     p5.strokeCap(p5.SQUARE);
@@ -410,13 +416,13 @@ class View {
 
     // Draw lines before the piece
     if (piece.stride === 1) {
-      p5.line(x + 0.4 + offsetX, y + 0.5, x + 0.1 + offsetX, y + 0.5);
+      p5.line(x + 0.4 + offsetX, y + 0.5, x + offsetX, y + 0.5);
     } else {
-      p5.line(x + 0.5, y + 0.5 + offsetY, x + 0.5, y + 0.3 + offsetY);
+      p5.line(x + 0.5, y + offsetY, x + 0.5, y + 0.3 + offsetY);
     }
 
     // Draw the piece
-    piece.draw(p5, size, offset);
+    piece.draw(p5, size, offset, index);
 
     // Draw lines after the piece
     p5.strokeWeight(0.2);
@@ -425,7 +431,7 @@ class View {
       p5.line(
         x + piece.size - 0.4 + offsetX,
         y + 0.5,
-        x + piece.size - 0.1 + offsetX,
+        x + piece.size + offsetX,
         y + 0.5
       );
     } else {
@@ -433,7 +439,7 @@ class View {
         x + 0.5,
         y + 0.5 + offsetY,
         x + 0.5,
-        y + piece.size - 0.2 + offsetY
+        y + piece.size - 0 + offsetY
       );
     }
   }
@@ -468,7 +474,7 @@ class View {
     p5.fill(this.boardColor);
     if (board.isSolved()) {
       if (Date.now() % 500 < 250) {
-        p5.fill("#AAAAAA");
+        p5.fill("#FFB1B7");
       }
     }
     p5.stroke(this.gridLineColor);
@@ -516,7 +522,7 @@ class View {
       }
       if (i === 0) {
         p5.fill(this.primaryPieceColor);
-        p5.stroke(this.primaryPieceColor);
+        p5.noStroke();
       } else {
         if (piece.stride === 1) {
           p5.fill(this.pieceColorHorizontal);
@@ -531,7 +537,7 @@ class View {
       let x = Math.floor(piece.position % size);
       let y = Math.floor(piece.position / size);
 
-      this.drawPieceWithLines(p5, x, y, piece, size);
+      this.drawPieceWithLines(p5, x, y, piece, size, 0, i);
     }
 
     // dragging
@@ -542,7 +548,7 @@ class View {
       offset = Math.max(offset, this.dragMin);
       if (this.dragPiece === 0) {
         p5.fill(this.primaryPieceColor);
-        p5.stroke(this.primaryPieceColor);
+        p5.noStroke();
       } else {
         if (piece.stride === 1) {
           p5.fill(this.pieceColorHorizontal);
@@ -554,7 +560,7 @@ class View {
       }
       let x = Math.floor(piece.position % size);
       let y = Math.floor(piece.position / size);
-      this.drawPieceWithLines(p5, x, y, piece, size, offset);
+      this.drawPieceWithLines(p5, x, y, piece, size, offset, this.dragPiece);
     }
   }
 }
@@ -713,6 +719,7 @@ if (window.top === window.self) {
     }
     let currentPuzzle = getCurrentPuzzle() || parseHash();
     if (currentPuzzle !== null && currentPuzzle !== "") {
+      $(".links").hide();
       if (parseHash() === "" || parseHash() === null) {
         $(".main-button").hide();
       } else {
@@ -749,6 +756,7 @@ if (window.top === window.self) {
       $(".main-button").hide();
       $("#view").hide();
       $(".footer").hide();
+      $(".buttons").hide();
       $(".timer").hide();
       $("#no-puzzle").show();
     }
