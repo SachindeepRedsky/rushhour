@@ -1,6 +1,17 @@
 // credits for this code go to: https://github.com/fogleman/rush
 
 // Constants
+
+let img;
+
+// Load the image.
+function preload() {
+  img = loadImage("winning_key.png");
+}
+
+function setup() {
+  createCanvas(200, 200);
+}
 let UnusableHeight =
   72 + // timer
   72 + // footer
@@ -52,7 +63,11 @@ class Piece {
       p5.strokeWeight(0);
       if (index == 0) {
         p5.strokeWeight(0);
-        p5.rect(x, y + 0, w, h);
+        // p5.rect(x, y + 0, w, h);
+        /*
+         Add winning key image 
+        */
+        p5.image(img, x, y + 0, w, h);
       } else {
         p5.strokeWeight(0);
         p5.rect(x + 0.2, y + 0, w - 0.4, h);
