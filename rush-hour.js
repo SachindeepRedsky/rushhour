@@ -4,6 +4,7 @@
 
 let img;
 let hash = "BCCoEEBoDFFNAADGoNoHoGMMoHoGLooHKKLo";
+console.log('location', location)
 /*
   Load the winning key image 
 */
