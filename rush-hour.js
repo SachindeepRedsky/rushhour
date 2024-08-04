@@ -3,8 +3,10 @@
 // Constants
 
 let img;
-
-// Load the image.
+let hash = "BCCoEEBoDFFNAADGoNoHoGMMoHoGLooHKKLo";
+/*
+  Load the winning key image 
+*/
 function preload() {
   img = loadImage("winning_key.png");
 }
@@ -21,11 +23,15 @@ let UnusableHeight =
 function parseHash() {
   try {
     let hash = location.hash.substring(1);
+    if (hash != null || hash < 0) {
+      location.hash = hash;
+      hash = "BCCoEEBoDFFNAADGoNoHoGMMoHoGLooHKKLo";
+      return hash;
+    }
     let i = hash.indexOf("/");
     if (i < 0) {
       return hash;
     }
-    return null;
   } catch (e) {
     return null;
   }
@@ -61,9 +67,12 @@ class Piece {
     }
     if (this.stride === 1) {
       p5.strokeWeight(0);
+
       if (index == 0) {
-        p5.strokeWeight(0);
-        // p5.rect(x, y + 0, w, h);
+        // const bgColor = p5.color(255, 255, 0, 70);
+        // Draw the background rectangle
+        // p5.fill(bgColor);
+        // p5.rect(x, y, w, h, 0.1);
         /*
          Add winning key image 
         */
@@ -256,6 +265,7 @@ class View {
     this.pieceOutlineColor = "#222222";
     this.wallColor = "#222222";
     this.wallBoltColor = "#AAAAAA";
+    this.timer = document.getElementById("timer");
   }
   bind(p5) {
     this.p5 = p5;
@@ -270,13 +280,46 @@ class View {
     try {
       let hash = location.hash.substring(1);
       let i = hash.indexOf("/");
+      let desc;
+      let timer;
+
       if (i < 0) {
-        let desc = hash;
+        let j = hash.indexOf("&t");
+        if (j < 0) {
+          desc = hash;
+          timer = 30;
+        } else {
+          // Timer parameter found
+          timer = parseInt(hash.substring(j + 2)); // Extract value after &t
+          desc = hash.substring(0, j); // Extract description
+          this.timer = timer;
+          document.getElementById("timer").innerHTML = timer;
+          if (location.hash.includes("&t")) {
+            location.hash = hash;
+            this.reset();
+            hash = hash;
+          }
+        }
         if (desc !== "" && desc !== null) {
           this.setBoard(new Board(desc));
         }
       } else {
-        let desc = hash.substring(0, i);
+        let hash1 = hash.substring(0, i);
+        let j = hash1.indexOf("&t");
+
+        if (j < 0) {
+          // No timer parameter found
+          desc = hash1;
+          timer = 30; // Default timer
+        } else {
+          // Timer parameter found
+          timer = parseInt(hash1.substring(j + 2)); // Extract value after &t
+          desc = hash1.substring(0, j); // Extract description
+        }
+
+        if (desc !== "" && desc !== null) {
+          this.setBoard(new Board(desc));
+        }
         let movesRequired = parseInt(hash.substring(i + 1));
         this.setBoard(new Board(desc), movesRequired);
       }
@@ -284,6 +327,7 @@ class View {
       console.log("error: " + e);
     }
   }
+
   computeScale() {
     let p5 = this.p5;
     let board = this.board;
@@ -350,7 +394,7 @@ class View {
         this.undoStack.push(move);
         this.changed();
         if (!timerStarted) {
-          startCountdown(30);
+          startCountdown(this.timer);
         }
         break;
       }
@@ -393,7 +437,7 @@ class View {
     this.changed();
     timerStarted = false;
     clearInterval(countdown);
-    document.getElementById("timer").textContent = "30";
+    document.getElementById("timer").textContent = this.timer;
   }
   undo() {
     let board = this.board;
