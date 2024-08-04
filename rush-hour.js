@@ -293,6 +293,8 @@ class View {
         if (j < 0) {
           desc = hash;
           timer = 30;
+          this.timer = timer;
+          document.getElementById("timer").innerHTML = timer;
         } else {
           // Timer parameter found
           timer = parseInt(hash.substring(j + 2)); // Extract value after &t
@@ -322,10 +324,12 @@ class View {
           // No timer parameter found
           desc = hash1;
           timer = 30; // Default timer
+          document.getElementById("timer").innerHTML = timer;
         } else {
           // Timer parameter found
           timer = parseInt(hash1.substring(j + 2)); // Extract value after &t
           desc = hash1.substring(0, j); // Extract description
+          document.getElementById("timer").innerHTML = timer;
         }
 
         if (desc !== "" && desc !== null) {
@@ -798,7 +802,7 @@ if (window.top === window.self) {
 
       let view = showBoard();
       view.setBoard(new Board(currentPuzzle), 60);
-      puzzleTimeLeftCountdown();
+      // puzzleTimeLeftCountdown();
 
       document.ontouchmove = function (event) {
         event.preventDefault();
