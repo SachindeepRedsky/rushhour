@@ -24,6 +24,7 @@ let UnusableHeight =
 function parseHash() {
   try {
     let hash = location.hash.substring(1);
+    console.log('parsee', hash)
     if (hash != null || hash < 0) {
       location.hash = hash;
       hash = "BCCoEEBoDFFNAADGoNoHoGMMoHoGLooHKKLo";
