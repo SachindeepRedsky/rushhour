@@ -280,22 +280,29 @@ class View {
   parseHash() {
     try {
       let hash = location.hash.substring(1);
+      console.log('hash', hash)
       let i = hash.indexOf("/");
+      console.log('i', i)
       let desc;
       let timer;
 
       if (i < 0) {
         let j = hash.indexOf("&t");
+         console.log('j', j)
         if (j < 0) {
           desc = hash;
           timer = 30;
         } else {
           // Timer parameter found
           timer = parseInt(hash.substring(j + 2)); // Extract value after &t
+         console.log('timer', timer)
           desc = hash.substring(0, j); // Extract description
+         console.log('desc', desc)
+
           this.timer = timer;
           document.getElementById("timer").innerHTML = timer;
           if (location.hash.includes("&t")) {
+         console.log('location.hash.includes', location.hash)
             location.hash = hash;
             this.reset();
             hash = hash;
@@ -306,6 +313,8 @@ class View {
         }
       } else {
         let hash1 = hash.substring(0, i);
+        console.log('else', hash, i, hash1 )
+
         let j = hash1.indexOf("&t");
 
         if (j < 0) {
