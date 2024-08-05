@@ -770,6 +770,7 @@ function getCurrentPuzzle() {
 
   return null;
 }
+console.log('window', window)
 
 if (window.top === window.self) {
   $(function () {
