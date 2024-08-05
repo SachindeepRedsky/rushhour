@@ -772,7 +772,7 @@ function getCurrentPuzzle() {
 }
 console.log('window', window)
 
-if (window.top === window.self) {
+// if (window.top === window.self) {
   $(function () {
     // if url has prev.html
     if (window.location.href.endsWith("prev.html")) {
@@ -836,14 +836,14 @@ if (window.top === window.self) {
       $("#no-puzzle").show();
     }
   });
-} else {
-  $(function () {
-    $("#view").html(
-      "Please visit <a href='https://fspv.github.io/hamster-kombat-puzzle-sim/'>https://fspv.github.io/hamster-kombat-puzzle-sim/</a> to play the game."
-    );
-    $(".main-button").hide();
-    $(".footer").hide();
-    $(".timer").hide();
-    $(".previous-button").hide();
-  });
-}
+// } else {
+//   $(function () {
+//     $("#view").html(
+//       "Please visit <a href='https://fspv.github.io/hamster-kombat-puzzle-sim/'>https://fspv.github.io/hamster-kombat-puzzle-sim/</a> to play the game."
+//     );
+//     $(".main-button").hide();
+//     $(".footer").hide();
+//     $(".timer").hide();
+//     $(".previous-button").hide();
+//   });
+// }
