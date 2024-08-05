@@ -1,7 +1,7 @@
 html,
 body {
-  height: 100%;
-  width: 100%;
+  /* height: 100%;
+  width: 100%; */
   overscroll-behavior: none;
 }
 
@@ -10,7 +10,7 @@ body {
   margin: 0;
   position: fixed;
   font-family: sans-serif;
-  color: #333;
+  color: #270a0a;
   overscroll-behavior-y: contain;
 }
 
@@ -38,13 +38,13 @@ img {
 }
 
 .footer {
-  position: absolute;
+  /* position: absolute;
   left: 0;
   right: 396px;
-  bottom: 192px;
-  padding: 24px 0;
+  bottom: 192px; */
+  /* padding: 24px 0;
   height: 72px;
-  text-align: center;
+  text-align: center; */
 }
 
 .timer {
@@ -58,24 +58,24 @@ img {
 }
 
 .links {
-  position: absolute;
+  /* position: absolute;
   left: 0;
   right: 0;
   bottom: 0;
   padding: 24px 0;
   height: 72px;
-  text-align: center;
+  text-align: center; */
 }
 
 .buttons {
-  margin-top: 8px;
+  /* margin-top: 8px;
   position: absolute;
   left: 380px;
   right: 0;
   bottom: 185px;
   padding: 24px 0;
   height: 72px;
-  text-align: center;
+  text-align: center; */
 }
 
 .label {
