@@ -4,7 +4,6 @@
 
 let img;
 let hash = "BCCoEEBoDFFNAADGoNoHoGMMoHoGLooHKKLo";
-console.log('location', location)
 /*
   Load the winning key image 
 */
@@ -24,9 +23,8 @@ let UnusableHeight =
 function parseHash() {
   try {
     let hash = location.hash.substring(1);
-    console.log('parsee', hash)
     if (hash != null || hash < 0) {
-      location.hash = hash;
+      location.hash = hash || "BCCoEEBoDFFNAADGoNoHoGMMoHoGLooHKKLo";
       hash = "BCCoEEBoDFFNAADGoNoHoGMMoHoGLooHKKLo";
       return hash;
     }
@@ -281,15 +279,12 @@ class View {
   parseHash() {
     try {
       let hash = location.hash.substring(1);
-      console.log('hash', hash)
       let i = hash.indexOf("/");
-      console.log('i', i)
       let desc;
       let timer;
 
       if (i < 0) {
         let j = hash.indexOf("&t");
-         console.log('j', j)
         if (j < 0) {
           desc = hash;
           timer = 30;
@@ -298,14 +293,11 @@ class View {
         } else {
           // Timer parameter found
           timer = parseInt(hash.substring(j + 2)); // Extract value after &t
-         console.log('timer', timer)
           desc = hash.substring(0, j); // Extract description
-         console.log('desc', desc)
 
           this.timer = timer;
           document.getElementById("timer").innerHTML = timer;
           if (location.hash.includes("&t")) {
-         console.log('location.hash.includes', location.hash)
             location.hash = hash;
             this.reset();
             hash = hash;
@@ -316,7 +308,6 @@ class View {
         }
       } else {
         let hash1 = hash.substring(0, i);
-        console.log('else', hash, i, hash1 )
 
         let j = hash1.indexOf("&t");
 
@@ -386,7 +377,7 @@ class View {
     this.dragMin = 0;
     this.dragMax = 0;
     for (let move of board.moves()) {
-      if (move.piece === this.dragPiece) {
+      if (move.piece === this.dragPiece && !board.isSolved()) {
         this.dragMin = Math.min(this.dragMin, move.steps);
         this.dragMax = Math.max(this.dragMax, move.steps);
       }
@@ -517,6 +508,10 @@ class View {
       );
     }
   }
+  stopCountdown() {
+    clearInterval(countdown);
+    timerStarted = false;
+  }
 
   draw() {
     let p5 = this.p5;
@@ -549,6 +544,7 @@ class View {
     if (board.isSolved()) {
       if (Date.now() % 500 < 250) {
         p5.fill("#FFB1B7");
+        this.stopCountdown();
       }
     }
     p5.stroke(this.gridLineColor);
@@ -770,7 +766,6 @@ function getCurrentPuzzle() {
 
   return null;
 }
-console.log('window', window)
 
 // if (window.top === window.self) {
   $(function () {
